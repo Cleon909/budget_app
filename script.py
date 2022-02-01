@@ -1,5 +1,4 @@
 from budget import Budget
-budgets = []
 
 # working = True
 
