@@ -1,13 +1,13 @@
-class Budget():
-    all_budgets = []
-    total_budget = sum([budget_.balance for budget_ in all_budgets])
-    total_budget_history = [] 
+tbal = []
+thist = []
 
+class Budget():
+    
     def __init__(self, name, balance):
         self.name = name
         self.balance = round(balance,2)
         self.history = []
-        Budget.all_budgets.append(self)
+        tbal.append(self)
 
     def __repr__(self):
         return f"There is £{self.balance} in the {self.name} budget. If you want a print of the history use history method."
@@ -21,7 +21,7 @@ class Budget():
         else:
             self.balance += amount
             self.history.append((self.balance, amount))
-            Budget.total_budget_history.append((self,self.balance,amount))
+            thist.append((self,self.balance,amount))
             print(f"You have deposited £{amount} into {self.name}. The new balance is £{self.balance}")
             return [round(amount,2), self.balance]
 
@@ -34,7 +34,7 @@ class Budget():
         else:
             self.balance -= amount
             self.history.append((self.balance, -amount))
-            Budget.total_budget_history.append((self,self.balance,amount))
+            thist.append((self,self.balance,amount))
             print(f"You have withdrawn £{amount} from {self.name}. The new balance is £{self.balance}")
             return [amount, self.balance]
     
@@ -44,12 +44,12 @@ class Budget():
             print("Must be a positive number")
         else:
             self.balance -= amount
-            budget_to += amount
+            budget_to.balance += amount
             self.history.append((self.balance, -amount))
             budget_to.history.append((budget_to.history, amount))
-            Budget.total_budget_history.append((self,self.balance,-amount))
-            Budget.total_budget_history.append((budget_to,budget_to.balance,amount))
-            print(f"You have transferred £{amount} from {self.name} to {budget_to.name}.\nBalance after transfer:\n\t{self.name}:£{self.balance}\n\t£{budget_to.name}:£{budget_to.balance}")
+            thist.append((self,self.balance,-amount))
+            thist.append((budget_to,budget_to.balance,amount))
+            print(f"You have transferred £{amount} from {self.name} to {budget_to.name}.\nBalance after transfer:\n\t{self.name}:£{self.balance}\n\t{budget_to.name}:£{budget_to.balance}")
             return [self.balance, amount]
         
     def transfer_to_from(self, budget_from, amount):
@@ -58,20 +58,31 @@ class Budget():
             print("Must be a positive number")
         else:
             self.balance += amount
-            budget_from -= amount
+            budget_from.balance -= amount
             self.history.append((self.balance, amount))
             budget_from.history.append((budget_from.history, -amount))
-            Budget.total_budget_history.append((self,self.balance,amount))
-            Budget.total_budget_history.append((budget_from,budget_from.balance,-amount))
+            thist.append((self,self.balance,amount))
+            thist.append((budget_from,budget_from.balance,-amount))
             print(f"You have transferred £{amount} from {self.name} to {budget_from.name}.\nBalance after transfer:\n\t{self.name}:£{self.balance}\n\t£{budget_from.name}:£{budget_from.balance}")
             return [self.balance, amount]
 
-    def history(self):
-        print(f"History of {self.name}\n{self.history}")
-        return self.history
+    def print_history(self):
+        print(f"History of {self.name}")
+        i = 1
+        for x in self.history:
+            print(f"{i} - \tChange: £{x[1]}\n\tbalance: £{x[0]}")
+            i += 1
+        
+    def print_balance(self):
+        print(f"Your balance of {self.name} is £{self.balance}")
     
-    def total_budget():
-        print(f"Your total budget is £{Budget.total_budget}")
-        return Budget.total_budget
+    def print_total_history(total_history):
+        for x in total_history:
+            print(f"Account: {x[0]}, Balance after Transfer: {x[1]}, amount: {x[2]}")
+    
+    def print_total_balance(total_balance):
+        bal = sum([x.balance for x in total_balance])
+        print(f"The balance across all budgets is £{bal}")
+    
     
 
