@@ -68,5 +68,5 @@ while working == True:
         Budget.print_total_history()
     elif choice == 9: # kill program
         print("Goodbye!")
-        Working = False
+        working = False
 
