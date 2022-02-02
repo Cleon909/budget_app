@@ -20,6 +20,16 @@ class Budget():
     def __repr__(self):
         return f"There is £{self.balance} in the {self} budget. If you want a print of the history use history method."
 
+    def deposit_to_budget():
+        Budget.list_budgets()
+        which_budget = input("Which budget do you want to deposit to?: ")
+        if which_budget not in [x.name for x in Budget.budgets]:
+            print("budget doesn't exist")
+        else:
+            how_much = round(float(input("How much do you want to deposit?: ")),2)
+            for b in Budget.budgets:
+                if which_budget == b.name:
+                    b.deposit(how_much)
     
     def deposit(self, amount):
         amount = round(amount,2)
@@ -34,6 +44,18 @@ class Budget():
             print(f"You have deposited £{amount} into {self.name}. The new balance is £{self.balance}")
             return [round(amount,2), self.balance]
 
+    def withdraw_from_budget():            
+        Budget.list_budgets()
+        which_budget = input("Which budget do you want to withdraw from?: ")
+        if which_budget not in [x.name for x in Budget.budgets]:
+            print("budget doesn't exist")
+        else:
+            how_much = round(float(input("How much do you want to withdraw?: ")),2)
+            for b in Budget.budgets:
+                if which_budget == b.name:
+                    b.withdraw(how_much)
+
+
     def withdraw(self, amount):
         amount = round(amount,2)
         if amount < 0:
@@ -47,6 +69,26 @@ class Budget():
             print(f"You have withdrawn £{amount} from {self.name}. The new balance is £{self.balance}", "blue")
             return [amount, self.balance]
     
+
+    def transfer_between_account():
+        Budget.list_budgets()
+        which_budget_from = input("Which budget do you want to transfer from?: ")
+        if which_budget_from not in [x.name for x in Budget.budgets]:
+            print("budget doesn't exist")
+        else:
+            which_budget_to = input("Which budget do you want to transfer to?: ")
+            if which_budget_to not in [x.name for x in Budget.budgets]:
+                print("budget doesn't exist")
+            else:
+                how_much = round(float(input("How much do you want to deposit?: ")),2)
+                for b in Budget.budgets:
+                    if which_budget_from == b.name:
+                        which_budget_from = b
+                for g in Budget.budgets:
+                    if which_budget_to == g.name:
+                        which_budget_to = g
+                Budget.transfer(which_budget_from,which_budget_to,how_much)
+
     def transfer(budget_from, budget_to, amount):
         amount = round(amount,2)
         if amount <= 0:
@@ -60,7 +102,27 @@ class Budget():
             Budget.budgets_history.append([budget_to.name,budget_to.balance,amount])
             print(f"You have transferred £{amount} from {budget_from.name} to {budget_to.name}.\nBalance after transfer:\n\t{budget_from.name}:£{budget_from.balance}\n\t{budget_to.name}:£{budget_to.balance}")
        
-        
+    def balance_of_budget():
+        Budget.list_budgets()
+        which_budget = input("Which budget do you want the balance of?: ")
+        if which_budget not in [x.name for x in Budget.budgets]:
+            print("budget doesn't exist")
+        else:
+            for b in Budget.budgets:
+                if which_budget == b.name:
+                    b.print_balance()    
+
+
+    def history_of_budget():
+        Budget.list_budgets()
+        which_budget = input("Which budget do you want to get a history for?: ")
+        if which_budget not in [x.name for x in Budget.budgets]:
+            print("budget doesn't exist")
+        else:
+            for b in Budget.budgets:
+                if which_budget == b.name:
+                    b.print_history()
+
 
     def print_history(self):
         print(f"History of {self.name}")
@@ -115,6 +177,7 @@ class Budget():
         for b in Budget.budgets:
             save.write(f"{b.name}/ {b.balance}/ {b.history}\n")
         save.close()
+        print("Goodbye!")
 
 
     def list_budgets():
@@ -130,7 +193,11 @@ class Budget():
                 Budget.check_for_save_file()
  
     
-
+    def create_budget():
+        Budget.list_budgets()
+        name = input("choose name for budget: ")
+        amount = round(float(input("Initial amount in budget ")),2)
+        name = Budget(name,amount)
     
     
 
