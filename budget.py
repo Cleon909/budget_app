@@ -10,6 +10,7 @@ class Budget():
         self.history = []
         self.__class__.budgets.append(self)
         Budget.budget_history.append((self.name, self.balance))
+        self.history.apend((self.balance))
      
 
     def __repr__(self):
