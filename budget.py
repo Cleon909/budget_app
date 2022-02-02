@@ -1,9 +1,6 @@
 from os.path import exists
 import ast
 
-#issues to fix:
-#putting in some numbers breaks the program as it thinks it's not decimal?
-#
 
 class Budget():
 
@@ -15,7 +12,15 @@ class Budget():
         self.balance = round(balance,2)
         self.history = history
         self.__class__.budgets.append(self)
-        
+
+    def create_budget():
+        Budget.list_budgets()
+        name = input("choose name for budget: ")
+        while name in (x.name for x in Budget.budgets):
+            print("name taken")
+            name = input("choose name for budget: ")
+        amount = round(float(input("Initial amount in budget: ")),2)
+        name = Budget(name,amount)
 
     def __repr__(self):
         return f"There is £{self.balance} in the {self} budget. If you want a print of the history use history method."
@@ -200,12 +205,6 @@ class Budget():
             if load == "1":
                 Budget.check_for_save_file()
  
-    
-    def create_budget():
-        Budget.list_budgets()
-        name = input("choose name for budget: ")
-        amount = round(float(input("Initial amount in budget ")),2)
-        name = Budget(name,amount)
     
     
 
