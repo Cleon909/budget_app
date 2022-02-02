@@ -2,8 +2,8 @@ from os.path import exists
 import ast
 
 #issues to fix:
-#transfer messes up history
 #putting in some numbers breaks the program as it thinks it's not decimal?
+#
 
 class Budget():
 
@@ -30,7 +30,7 @@ class Budget():
         else:
             self.balance += amount
             self.history.append([self.balance, amount])
-            self.budgets_history.append([self.name,self.balance,amount])
+            Budget.budgets_history.append([self.name,self.balance,amount])
             print(f"You have deposited £{amount} into {self.name}. The new balance is £{self.balance}")
             return [round(amount,2), self.balance]
 
@@ -43,22 +43,23 @@ class Budget():
         else:
             self.balance -= amount
             self.history.append([self.balance, -amount])
-            self.budgets_history.append([self.name,self.balance,amount])
+            Budget.budgets_history.append([self.name,self.balance,amount])
             print(f"You have withdrawn £{amount} from {self.name}. The new balance is £{self.balance}", "blue")
             return [amount, self.balance]
     
-    def transfer_from_to(self, budget_to, amount):
+    def transfer(budget_from, budget_to, amount):
         amount = round(amount,2)
         if amount <= 0:
             print("Must be a positive number")
         else:
-            self.balance -= amount
+            budget_from.balance -= amount
             budget_to.balance += amount
-            self.history.append([self.balance, -amount])
+            budget_from.history.append([budget_from.balance, -amount])
             budget_to.history.append([budget_to.balance, amount])
-            Budget.budgets_history.append([self.name,self.balance,-amount])
-            print(f"You have transferred £{amount} from {self.name} to {budget_to.name}.\nBalance after transfer:\n\t{self.name}:£{self.balance}\n\t{budget_to.name}:£{budget_to.balance}")
-            return [self.balance, amount]
+            Budget.budgets_history.append([budget_from.name,budget_from.balance,-amount])
+            Budget.budgets_history.append([budget_to.name,budget_to.balance,amount])
+            print(f"You have transferred £{amount} from {budget_from.name} to {budget_to.name}.\nBalance after transfer:\n\t{budget_from.name}:£{budget_from.balance}\n\t{budget_to.name}:£{budget_to.balance}")
+       
         
 
     def print_history(self):

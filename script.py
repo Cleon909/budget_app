@@ -11,7 +11,7 @@ while working == True:
         if choice == "1": #create budget
             Budget.list_budgets()
             name = input("choose name for budget: ")
-            amount = round(int(input("Initial amount in budget ")),2)
+            amount = round(float(input("Initial amount in budget ")),2)
             name = Budget(name,amount)
         elif choice == "2": #deposit to budget
             Budget.list_budgets()
@@ -19,7 +19,7 @@ while working == True:
             if which_budget not in [x.name for x in Budget.budgets]:
                 print("budget doesn't exist")
             else:
-                how_much = round(int(input("How much do you want to deposit?: ")),2)
+                how_much = round(float(input("How much do you want to deposit?: ")),2)
                 for b in Budget.budgets:
                     if which_budget == b.name:
                         b.deposit(how_much)
@@ -29,7 +29,7 @@ while working == True:
             if which_budget not in [x.name for x in Budget.budgets]:
                 print("budget doesn't exist")
             else:
-                how_much = round(int(input("How much do you want to withdraw?: ")),2)
+                how_much = round(float(input("How much do you want to withdraw?: ")),2)
                 for b in Budget.budgets:
                     if which_budget == b.name:
                         b.withdraw(how_much)
@@ -43,14 +43,14 @@ while working == True:
                 if which_budget_to not in [x.name for x in Budget.budgets]:
                     print("budget doesn't exist")
                 else:
-                    how_much = round(int(input("How much do you want to deposit?: ")),2)
+                    how_much = round(float(input("How much do you want to deposit?: ")),2)
                     for b in Budget.budgets:
                         if which_budget_from == b.name:
                             which_budget_from = b
                     for g in Budget.budgets:
                         if which_budget_to == g.name:
                             which_budget_to = g
-                    which_budget_from.transfer_from_to(which_budget_to,how_much)
+                    Budget.transfer(which_budget_from,which_budget_to,how_much)
         elif choice == "5": # balance of budget
             Budget.list_budgets()
             which_budget = input("Which budget do you want the balance of?: ")
