@@ -9,10 +9,11 @@ class Budget():
         self.balance = round(balance,2)
         self.history = []
         self.__class__.budgets.append(self)
+        Budget.budget_history.append((self.name, self.balance))
      
 
     def __repr__(self):
-        return f"There is £{self.balance} in the {self.name} budget. If you want a print of the history use history method."
+        return f"There is £{self.balance} in the {self} budget. If you want a print of the history use history method."
     
     def deposit(self, amount):
         amount = round(amount,2)
@@ -72,7 +73,7 @@ class Budget():
             i += 1
     def print_all_balances():
         print("List of all current balances")
-        for x in budgets:
+        for x in Budget.budgets:
             print(f"Balance of {x.name} is currently £{x.balance}\n")   
 
 
