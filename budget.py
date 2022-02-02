@@ -10,7 +10,7 @@ class Budget():
     budgets_history = []
     budgets = []
 
-    def __init__(self, name, balance=0, history=[]):
+    def __init__(self, name, balance=0, history=None):
         self.name = name
         self.balance = round(balance,2)
         self.history = history
@@ -39,6 +39,8 @@ class Budget():
             print("no change")
         else:
             self.balance += amount
+            if isinstance(self.history, type(None)):
+                self.history = []
             self.history.append([self.balance, amount])
             Budget.budgets_history.append([self.name,self.balance,amount])
             print(f"You have deposited £{amount} into {self.name}. The new balance is £{self.balance}")
@@ -64,6 +66,8 @@ class Budget():
             print("no change")
         else:
             self.balance -= amount
+            if isinstance(self.history, type(None)):
+                self.history = []
             self.history.append([self.balance, -amount])
             Budget.budgets_history.append([self.name,self.balance,amount])
             print(f"You have withdrawn £{amount} from {self.name}. The new balance is £{self.balance}", "blue")
@@ -96,7 +100,11 @@ class Budget():
         else:
             budget_from.balance -= amount
             budget_to.balance += amount
+            if isinstance(budget_from.history, type(None)):
+                budget_from.history = []
             budget_from.history.append([budget_from.balance, -amount])
+            if isinstance(budget_to.history, type(None)):
+                budget_to.history = []
             budget_to.history.append([budget_to.balance, amount])
             Budget.budgets_history.append([budget_from.name,budget_from.balance,-amount])
             Budget.budgets_history.append([budget_to.name,budget_to.balance,amount])
