@@ -4,7 +4,7 @@ class Budget():
     budgets_history = []
     budgets = []
 
-    def __init__(self, name, balance):
+    def __init__(self, name, balance=0):
         self.name = name
         self.balance = round(balance,2)
         self.history = []
@@ -54,19 +54,6 @@ class Budget():
             print(f"You have transferred £{amount} from {self.name} to {budget_to.name}.\nBalance after transfer:\n\t{self.name}:£{self.balance}\n\t{budget_to.name}:£{budget_to.balance}")
             return [self.balance, amount]
         
-    def transfer_to_from(self, budget_from, amount):
-        amount = round(amount,2)
-        if amount <= 0:
-            print("Must be a positive number")
-        else:
-            self.balance += amount
-            budget_from.balance -= amount
-            self.history.append((self.balance, amount))
-            budget_from.history.append((budget_from.history, -amount))
-            self.budgets_history.append((self.name,self.balance,amount))
-            self.budgets_history.append((budget_from.name,budget_from.balance,-amount))
-            print(f"You have transferred £{amount} from {self.name} to {budget_from.name}.\nBalance after transfer:\n\t{self.name}:£{self.balance}\n\t£{budget_from.name}:£{budget_from.balance}")
-            return [self.balance, amount]
 
     def print_history(self):
         print(f"History of {self.name}")
@@ -83,10 +70,11 @@ class Budget():
         for x in budgets_history:
             print(f"{i} - Account: {x[0]}, Balance after Transfer: {x[1]}, amount: £{x[2]}")
             i += 1
-    
-    def append_budget(self, budgets=budgets):
-        budgets.append(self)
-    
+    def print_all_balances():
+        print("List of all current balances")
+        for x in budgets:
+            print(f"Balance of {x.name} is currently £{x.balance}\n")   
+
 
     def print_total_balance(budgets=budgets):
         bal = sum([x.balance for x in budgets])
