@@ -1,4 +1,3 @@
-
 class Budget():
 
     budgets_history = []
@@ -9,8 +8,8 @@ class Budget():
         self.balance = round(balance,2)
         self.history = []
         self.__class__.budgets.append(self)
-        Budget.budget_history.append((self.name, self.balance))
-        self.history.apend((self.balance))
+        Budget.budgets_history.append((self.name, self.balance, self.balance))
+        self.history.append((self.balance, self.balance))
      
 
     def __repr__(self):
@@ -39,7 +38,7 @@ class Budget():
             self.balance -= amount
             self.history.append((self.balance, -amount))
             self.budgets_history.append((self.name,self.balance,amount))
-            print(f"You have withdrawn £{amount} from {self.name}. The new balance is £{self.balance}")
+            print1(f"You have withdrawn £{amount} from {self.name}. The new balance is £{self.balance}", "blue")
             return [amount, self.balance]
     
     def transfer_from_to(self, budget_to, amount):
@@ -70,7 +69,7 @@ class Budget():
     def print_total_history(budgets_history=budgets_history):
         i = 1
         for x in budgets_history:
-            print(f"{i} - Account: {x[0]}, Balance after Transfer: {x[1]}, amount: £{x[2]}")
+            print(f"{i} - Account: {x[0]}, Balance after Transfer: £{x[1]}, amount: £{x[2]}")
             i += 1
     def print_all_balances():
         print("List of all current balances")
