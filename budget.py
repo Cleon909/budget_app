@@ -1,24 +1,23 @@
 from os.path import exists
+import ast
+
+#issues to fix:
+#transfer messes up history
+#loading the file creates a new entry on the history(maybe the history is not worth it?)
+#putting in some numbers breaks the program as it thinks it's not decimal?
 
 class Budget():
 
     budgets_history = []
     budgets = []
 
-    def __init__(self, name, balance=0):
+    def __init__(self, name, balance=0, history=[]):
         self.name = name
         self.balance = round(balance,2)
-        self.history = []
+        self.history = history
         self.__class__.budgets.append(self)
         Budget.budgets_history.append([self.name, self.balance, self.balance])
         self.history.append([self.balance, self.balance])
-        # code to save state when object created, not really needed
-        # save = open("{self.name}.txt", "r")
-        # content = save.read()
-        # save.close()
-        # save = open("save.txt", "w")
-        # save.write(content)
-        # save.write(str(self.name, self.balance, self.history))
 
 
     def __repr__(self):
@@ -34,7 +33,7 @@ class Budget():
         else:
             self.balance += amount
             self.history.append([self.balance, amount])
-            self.budgets_history.append((self.name,self.balance,amount))
+            self.budgets_history.append([self.name,self.balance,amount])
             print(f"You have deposited £{amount} into {self.name}. The new balance is £{self.balance}")
             return [round(amount,2), self.balance]
 
@@ -58,10 +57,9 @@ class Budget():
         else:
             self.balance -= amount
             budget_to.balance += amount
-            self.history.append((self.balance, -amount))
-            budget_to.history.append([budget_to.history, amount])
-            self.budgets_history.append([self.name,self.balance,-amount])
-            self.budgets_history.append([budget_to.name,budget_to.balance,amount])
+            self.history.append([self.balance, -amount])
+            budget_to.history.append([budget_to.balance, amount])
+            Budget.budgets_history.append([self.name,self.balance,-amount])
             print(f"You have transferred £{amount} from {self.name} to {budget_to.name}.\nBalance after transfer:\n\t{self.name}:£{self.balance}\n\t{budget_to.name}:£{budget_to.balance}")
             return [self.balance, amount]
         
@@ -95,32 +93,28 @@ class Budget():
         if exists("save.txt"):
             save = open("save.txt", "r")
             details = save.readlines()
-            for line in details:
-                
-            #put code to load objects and variables here
+            budgets_history = ast.literal_eval(details[0])
+            i = 1
+            for line in details[1:]:
+                line = line.split("/")
+                name = line[0]
+                balance = int(line[1])
+                history = line[2]
+                history = ast.literal_eval(history)
+                create_object = 'i = Budget(name, balance, history)'
+                exec(create_object)
+                i += 1
             save.close()
         else:
             save = open("save.txt", "w")
             save.close()
-    def flatten(l):
-        out = []
-        for item in l:
-            if isinstance(item, (list, tuple)):
-                out.extend(Budget.flatten(item))
-        else:
-            out.append(item)
-        return out
-
-    def item_to_string(list):
-        out = []
-        for x in list:
-            out.append(str(x))
 
     def save_state():
         save = open("save.txt", "w")
-        save.write(str(Budget.budgets_history))
+        save.write(str(Budget.budgets_history) + "\n")
         for b in Budget.budgets:
-            save.write(str(f"{b.name}, {b.balance}, {b.history}"))
+            save.write(f"{b.name}/ {b.balance}/ {b.history}\n")
+        save.close()
 
 
     def list_budgets():
@@ -128,6 +122,13 @@ class Budget():
         for b in Budget.budgets:
             print(f"{b.name}")
     
+    def load_or_not():
+        load = ""
+        while load not in ("1", "2"):
+            load = input("Do you want to load a file?\n1 for yes 2 for no: ")            
+            if load == "1":
+                Budget.check_for_save_file()
+ 
     
 
     
