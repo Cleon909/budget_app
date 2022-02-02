@@ -3,7 +3,6 @@ import ast
 
 #issues to fix:
 #transfer messes up history
-#loading the file creates a new entry on the history(maybe the history is not worth it?)
 #putting in some numbers breaks the program as it thinks it's not decimal?
 
 class Budget():
@@ -16,9 +15,7 @@ class Budget():
         self.balance = round(balance,2)
         self.history = history
         self.__class__.budgets.append(self)
-        Budget.budgets_history.append([self.name, self.balance, self.balance])
-        self.history.append([self.balance, self.balance])
-
+        
 
     def __repr__(self):
         return f"There is £{self.balance} in the {self} budget. If you want a print of the history use history method."
@@ -79,6 +76,7 @@ class Budget():
         for x in budgets_history:
             print(f"{i} - Account: {x[0]}, Balance after Transfer: £{x[1]}, amount: £{x[2]}")
             i += 1
+
     def print_all_balances():
         print("List of all current balances")
         for x in Budget.budgets:
@@ -106,6 +104,7 @@ class Budget():
                 i += 1
             save.close()
         else:
+            print("no save file found")
             save = open("save.txt", "w")
             save.close()
 
