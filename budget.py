@@ -49,6 +49,7 @@ class Budget():
             self.history.append([self.balance, amount])
             Budget.budgets_history.append([self.name,self.balance,amount])
             print(f"You have deposited £{amount} into {self.name}. The new balance is £{self.balance}")
+            Budget.save_state()
             return [round(amount,2), self.balance]
 
     def withdraw_from_budget():            
@@ -76,6 +77,7 @@ class Budget():
             self.history.append([self.balance, -amount])
             Budget.budgets_history.append([self.name,self.balance,amount])
             print(f"You have withdrawn £{amount} from {self.name}. The new balance is £{self.balance}", "blue")
+            Budget.save_state()
             return [amount, self.balance]
     
 
@@ -97,6 +99,7 @@ class Budget():
                     if which_budget_to == g.name:
                         which_budget_to = g
                 Budget.transfer(which_budget_from,which_budget_to,how_much)
+                
 
     def transfer(budget_from, budget_to, amount):
         amount = round(amount,2)
@@ -114,7 +117,8 @@ class Budget():
             Budget.budgets_history.append([budget_from.name,budget_from.balance,-amount])
             Budget.budgets_history.append([budget_to.name,budget_to.balance,amount])
             print(f"You have transferred £{amount} from {budget_from.name} to {budget_to.name}.\nBalance after transfer:\n\t{budget_from.name}:£{budget_from.balance}\n\t{budget_to.name}:£{budget_to.balance}")
-       
+            Budget.save_state()
+
     def balance_of_budget():
         Budget.list_budgets()
         which_budget = input("Which budget do you want the balance of?: ")
@@ -190,7 +194,7 @@ class Budget():
         for b in Budget.budgets:
             save.write(f"{b.name}/ {b.balance}/ {b.history}\n")
         save.close()
-        print("Goodbye!")
+        
 
 
     def list_budgets():

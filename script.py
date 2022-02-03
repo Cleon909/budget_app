@@ -29,4 +29,5 @@ while working == True:
         elif choice == "10": # kill program and save state
             Budget.save_state()
             working = False
+            print("Goodbye!")
 
