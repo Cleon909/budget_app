@@ -1,6 +1,6 @@
 from os.path import exists
 import ast
-
+import pdb
 
 class Budget():
 
@@ -12,7 +12,7 @@ class Budget():
         self.balance = round(balance,2)
         self.history = history
         self.__class__.budgets.append(self)
-
+   
     def create_budget():
         Budget.list_budgets()
         name = input("choose name for budget: ")
@@ -38,6 +38,7 @@ class Budget():
     
     def deposit(self, amount):
         amount = round(amount,2)
+        pre_deposit = self.balance
         if amount < 0:
             print("Negative amount not allowed, use withdraw instead")
         elif amount == 0:
@@ -48,7 +49,7 @@ class Budget():
                 self.history = []
             self.history.append([self.balance, amount])
             Budget.budgets_history.append([self.name,self.balance,amount])
-            print(f"You have deposited £{amount} into {self.name}. The new balance is £{self.balance}")
+            print(f"You have deposited £{amount} into {self.name}. The balance before was £{pre_deposit} and the new balance is £{self.balance}")
             Budget.save_state()
             return [round(amount,2), self.balance]
 
@@ -66,6 +67,7 @@ class Budget():
 
     def withdraw(self, amount):
         amount = round(amount,2)
+        pre_withdraw = self.balance
         if amount < 0:
             print("Negative amount not allowed, use a positive integer")
         elif amount == 0:
@@ -76,7 +78,7 @@ class Budget():
                 self.history = []
             self.history.append([self.balance, -amount])
             Budget.budgets_history.append([self.name,self.balance,amount])
-            print(f"You have withdrawn £{amount} from {self.name}. The new balance is £{self.balance}", "blue")
+            print(f"You have withdrawn £{amount} from {self.name}. The balance before the withdrawal was {pre_withdraw} and the new balance is £{self.balance}")
             Budget.save_state()
             return [amount, self.balance]
     
@@ -103,6 +105,8 @@ class Budget():
 
     def transfer(budget_from, budget_to, amount):
         amount = round(amount,2)
+        pre_withdraw = budget_from.balance
+        pre_deposit = budget_to.balance
         if amount <= 0:
             print("Must be a positive number")
         else:
@@ -116,7 +120,7 @@ class Budget():
             budget_to.history.append([budget_to.balance, amount])
             Budget.budgets_history.append([budget_from.name,budget_from.balance,-amount])
             Budget.budgets_history.append([budget_to.name,budget_to.balance,amount])
-            print(f"You have transferred £{amount} from {budget_from.name} to {budget_to.name}.\nBalance after transfer:\n\t{budget_from.name}:£{budget_from.balance}\n\t{budget_to.name}:£{budget_to.balance}")
+            print(f"You have transferred £{amount} from {budget_from.name} to {budget_to.name}.\nBalance before transfer:\n\t{budget_from.name}:£{pre_withdraw}\n\t{budget_to.name}:£{pre_deposit}\nBalance after transfer:\n\t{budget_from.name}:£{budget_from.balance}\n\t{budget_to.name}:£{budget_to.balance}")
             Budget.save_state()
 
     def balance_of_budget():
@@ -176,7 +180,7 @@ class Budget():
             for line in details[1:]:
                 line = line.split("/")
                 name = line[0]
-                balance = int(line[1])
+                balance = round(float(line[1]),2)
                 history = line[2]
                 history = ast.literal_eval(history)
                 create_object = 'i = Budget(name, balance, history)'
@@ -195,8 +199,6 @@ class Budget():
             save.write(f"{b.name}/ {b.balance}/ {b.history}\n")
         save.close()
         
-
-
     def list_budgets():
         print("List of existing budgets:")
         for b in Budget.budgets:
@@ -208,7 +210,3 @@ class Budget():
             load = input("Do you want to load a file?\n1 for yes 2 for no: ")            
             if load == "1":
                 Budget.check_for_save_file()
- 
-    
-    
-
