@@ -7,10 +7,10 @@ working = True
 while working == True:
     choice = ""
     while choice not in ("1", "2", "3", "4", "5", "6", "7", "8", "9", "10"):
-        choice = input("\n\n\nWhat do you want to do?\nInput 1 to create a budget.\nInput 2 to deposit to a budget.\nInput 3 to withdraw from a budget.\nInput 4 to transfer from one budget to another.\nInput 5 to print out the current balance of a budget.\nInput 6 to print out a list of all balances.\nInput 7 to print out an individual budget history.\nTo print out a history of all budgets choose 8:\nTo print total across all balances choose 9.\nTo exit program choose 10:")
-        if choice == "1":
+        choice = input("\n\n\nWhat do you want to do?\nInput 1 to create a budget.\nInput 2 to deposit to a budget.\nInput 3 to withdraw from a budget.\nInput 4 to transfer from one budget to another.\nInput 5 to print out the current balance of a budget.\nInput 6 to print out a list of all balances.\nInput 7 to print out an individual budget history.\nInput 8 to print out a history of all budgets.\nInput 9 to print all balances.\nInput 10 to exit program:  ")
+        if choice == "1": #create a budget
             Budget.create_budget()
-        elif choice == "2": 
+        elif choice == "2": #deposit to budget 
             Budget.deposit_to_budget()
         elif choice == "3": #withdraw from budget
             Budget.withdraw_from_budget()
