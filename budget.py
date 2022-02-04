@@ -1,5 +1,5 @@
 from os.path import exists
-import ast
+from ast import literal_eval
 import pdb
 
 class Budget():
@@ -12,7 +12,6 @@ class Budget():
         self.name = name
         self.balance = round(balance,2)
         self.history = history
-        
 
     def create_budget():
         Budget.list_budgets()
@@ -33,7 +32,10 @@ class Budget():
 
     def get_input_for_deposit():
         Budget.list_budgets()
-        which_budget = str(int(input("\nWhich budget do you want to deposit to? Input number, or 0 to go back to main menu: "))-1)
+        which_budget = ""
+        while which_budget.isdigit() == False:
+            which_budget = input("\nWhich budget do you want to deposit to? Input number, or 0 to go back to main menu: ")
+        which_budget = str(int(which_budget)-1)
         if which_budget == "-1":
             return
         elif which_budget not in Budget.menu_list:
@@ -60,7 +62,10 @@ class Budget():
 
     def get_input_for_withdraw():            
         Budget.list_budgets()
-        which_budget = str(int(input("\nWhich budget do you want to withdraw from? Input number or input 0 to back to main menu: "))-1)
+        which_budget = ""
+        while which_budget.isdigit() == False:
+            which_budget = input("\nWhich budget do you want to withdraw from? Input number, or 0 to go back to main menu: ")
+        which_budget = str(int(which_budget)-1)
         if which_budget == "-1":
             return
         elif which_budget not in Budget.menu_list:
@@ -81,7 +86,7 @@ class Budget():
             if isinstance(self.history, type(None)):
                 self.history = []
             self.history.append([self.balance, -amount])
-            Budget.budgets_history.append([self.name,self.balance,f"amount"])
+            Budget.budgets_history.append([self.name,self.balance,-amount])
             print(f"\nYou have withdrawn £{amount} from {self.name}. The new balance is £{self.balance}", "blue")
             Budget.save_state()
   
@@ -89,13 +94,19 @@ class Budget():
 
     def get_transfer_details():
         Budget.list_budgets()
-        which_budget_from = str(int(input("\nWhich budget do you want to transfer from? Input number or 0 to return to main menu: "))-1)
+        which_budget_from = ""
+        while which_budget_from.isdigit() == False:
+            which_budget = input("\nWhich budget do you want to transfer from? Input number, or 0 to go back to main menu: ")
+        which_budget = str(int(which_budget)-1)
         if which_budget_from == "-1":
             return
         elif which_budget_from not in Budget.menu_list:
             print("\nbudget doesn't exist")
         else:
-            which_budget_to = str(int(input("Which budget do you want to transfer to? Input number or input 0 to return to main menu"))-1)
+            which_budget_to = ""
+            while which_budget.isdigit() == False:
+                which_budget = input("\nWhich budget do you want to transfer to? Input number, or 0 to go back to main menu: ")
+            which_budget = str(int(which_budget)-1)
             if which_budget_to == "-1":
                 return
             elif which_budget_to not in Budget.menu_list:
@@ -124,7 +135,10 @@ class Budget():
 
     def balance_of_budget():
         Budget.list_budgets()
-        which_budget = str(int(input("\nWhich budget do you want the balance of? type in number next to name or 0 to return to main menu: "))-1)
+        which_budget = ""
+        while which_budget.isdigit() == False:
+            which_budget = input("\nWhich budget do you want the balance of? type in number next to name or 0 to return to main menu: ")
+        which_budget = str(int(which_budget)-1)
         if which_budget == "-1":
             return
         elif which_budget not in Budget.menu_list:
@@ -135,7 +149,10 @@ class Budget():
 
     def get_input_for_history():
         Budget.list_budgets()
-        which_budget = str(int(input("\nWhich budget do you want to get a history for? Type in number next to name or 0 to return to menu: "))-1)
+        which_budget = ""
+        while which_budget.isdigit() == False:
+            which_budget = input("\nWWhich budget do you want to get a history for? Type in number next to name or 0 to return to menu: ")
+        which_budget = str(int(which_budget)-1)
         if which_budget == "-1":
             return        
         elif which_budget not in Budget.menu_list:
@@ -153,21 +170,21 @@ class Budget():
             else:
                 print(f"{i} - \tChange: £{x[1]}\n\tbalance: £{x[0]}\n")
             i += 1
-        
-    def print_balance(self):
-        print(f"\nYour balance of {self.name} is £{self.balance}")
     
-    def print_total_history(budgets_history=budgets_history):
+    def print_total_history():
+        (str(1))
         i = 1
-        print = "\n"
-        pdb.set_trace()
+        print("\n")
         for x in Budget.budgets_history:
             if x[2] =="created":
-                print(f"{i} - Account {x[0]}, was created with a balance of £{x[1]})")
+                print(f"Account {x[0]} was created with a balance of £{x[1]}")
             else:
                 print(f"{i} - Account: {x[0]}. Amount changed: £{x[2]}. Balance after: £{x[1]}")
             i += 1
 
+    def print_balance(self):
+        print(f"\nYour balance of {self.name} is £{self.balance}")
+    
     def print_all_balances():
         print("\nList of all current balances")
         print("\n")
@@ -183,14 +200,14 @@ class Budget():
         if exists("save.txt"):
             save = open("save.txt", "r")
             details = save.readlines()
-            Budget.budgets_history = ast.literal_eval(details[0])
+            Budget.budgets_history = literal_eval(details[0])
             i = 1
             for line in details[1:]:
                 line = line.split("/")
                 name = line[0]
                 balance = round(float(line[1]),2)
                 history = line[2]
-                history = ast.literal_eval(history)
+                history = literal_eval(history)
                 create_object = f'a{i} = Budget(name, balance, history)'
                 append_object = f'Budget.budgets.append(a{i})'
                 exec(create_object)
