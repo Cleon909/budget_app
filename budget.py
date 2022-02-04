@@ -19,21 +19,30 @@ class Budget():
         while name in (x.name for x in Budget.budgets):
             print("\nname taken")
             name = input("\nchoose name for budget: ")
-        amount = round(float(input("\nInitial amount in budget: ")),2)
+        amount = input("\nInitial amount in budget: ")
+        while amount.replace(".","",1).isdigit() == False: 
+            print("\nNot a valaid amount")
+            amount = input("\nInitial amount in budget: ")
+        while float(amount) <= 0:
+            print("\nNot a valaid amount")
+            amount = input("\nInitial amount in budget: ")
+        amount = round(float(amount),2)
         name = Budget(name,amount)
         name.history = []
         name.history.append(["created", name.balance])
         Budget.budgets.append(name)
         Budget.budgets_history.append([name.name,name.balance, "created"])
+        Budget.save_state()
 
     def __repr__(self):
-        rep = "There is £ " + str(self.balance) + " in the " + self.name + " budget. If you want a print of the history use history method."
+        rep = f"There is £{self.balance:.2f} in the {self.name} budget. If you want a print of the history use history method."
         return rep
 
     def get_input_for_deposit():
         Budget.list_budgets()
-        which_budget = ""
+        which_budget = input("\nWhich budget do you want to deposit to? Input number, or 0 to go back to main menu: ")
         while which_budget.isdigit() == False:
+            print("\nInvalid input")
             which_budget = input("\nWhich budget do you want to deposit to? Input number, or 0 to go back to main menu: ")
         which_budget = str(int(which_budget)-1)
         if which_budget == "-1":
@@ -41,29 +50,32 @@ class Budget():
         elif which_budget not in Budget.menu_list:
             print("\nbudget doesn't exist")
         else:
-            how_much = round(float(input("\nHow much do you want to deposit?: ")),2)
+            how_much = input("\nHow much do you want to deposit? (must be a positive amount): ")
+            while how_much.replace(".","",1).isdigit() == False:
+                print("\nNot a valid amount.")
+                how_much = input("\nHow much do you want to deposit? (must be a positive amount): ")
+            while float(how_much) <= 0:
+                print("\nNot a valid amount.")
+                how_much = input("\nHow much do you want to deposit? (must be a positive amount): ")
+            how_much = round(float(how_much),2)
             Budget.budgets[int(which_budget)].deposit(how_much)
     
     def deposit(self, amount):
         amount = round(amount,2)
-        if amount < 0:
-            print("\nNegative amount not allowed, use withdraw instead")
-        elif amount == 0:
-            print("\nno change")
-        else:
-            self.balance += amount
-            if isinstance(self.history, type(None)):
-                self.history = []
-            self.history.append([self.balance, amount])
-            Budget.budgets_history.append([self.name,self.balance, amount])
-            print(f"\nYou have deposited £{amount} into {self.name}. The new balance is £{self.balance}")
-            Budget.save_state()
+        self.balance += amount
+        if isinstance(self.history, type(None)):
+            self.history = []
+        self.history.append([self.balance, amount])
+        Budget.budgets_history.append([self.name,self.balance, amount])
+        print(f"\nYou have deposited £{amount:.2f} into {self.name}. The new balance is £{self.balance:.2f}")
+        Budget.save_state()
  
 
     def get_input_for_withdraw():            
         Budget.list_budgets()
-        which_budget = ""
+        which_budget = input("\nWhich budget do you want to withdraw from? Input number, or 0 to go back to main menu: ")
         while which_budget.isdigit() == False:
+            print("\ninvalid input")
             which_budget = input("\nWhich budget do you want to withdraw from? Input number, or 0 to go back to main menu: ")
         which_budget = str(int(which_budget)-1)
         if which_budget == "-1":
@@ -71,50 +83,59 @@ class Budget():
         elif which_budget not in Budget.menu_list:
             print("\nbudget doesn't exist")
         else:
-            how_much = round(float(input("\nHow much do you want to withdraw?: ")),2)
+            how_much = input("\nHow much do you want to withdraw? (must be a positive amount): ")
+            while how_much.replace(".","",1).isdigit() == False: 
+                print("\nNot a valid amount")
+                how_much = input("\nHow much do you want to withdraw? (must be a positive amount): ")
+            while float(how_much) <= 0:
+                print("\nNot a valid amount")
+                how_much = input("\nHow much do you want to withdraw? (must be a positive amount): ")
+            how_much = round(float(how_much),2)
             Budget.budgets[int(which_budget)].withdraw(how_much)
 
 
     def withdraw(self, amount):
         amount = round(amount,2)
-        if amount < 0:
-            print("\nNegative amount not allowed, use a positive integer")
-        elif amount == 0:
-            print("\nno change")
-        else:
-            self.balance -= amount
-            if isinstance(self.history, type(None)):
-                self.history = []
-            self.history.append([self.balance, -amount])
-            Budget.budgets_history.append([self.name,self.balance,-amount])
-            print(f"\nYou have withdrawn £{amount} from {self.name}. The new balance is £{self.balance}", "blue")
-            Budget.save_state()
+        self.balance -= amount
+        if isinstance(self.history, type(None)):
+            self.history = []
+        self.history.append([self.balance, -amount])
+        Budget.budgets_history.append([self.name,self.balance,-amount])
+        print(f"\nYou have withdrawn £{amount:.2f} from {self.name}. The new balance is £{self.balance:.2f}", "blue")
+        Budget.save_state()
   
     
 
     def get_transfer_details():
         Budget.list_budgets()
-        which_budget_from = ""
+        which_budget_from = input("\nWhich budget do you want to transfer from? Input number, or 0 to go back to main menu: ")
         while which_budget_from.isdigit() == False:
-            which_budget = input("\nWhich budget do you want to transfer from? Input number, or 0 to go back to main menu: ")
-        which_budget = str(int(which_budget)-1)
+            print("\ninvalid input")
+            which_budget_from = input("\nWhich budget do you want to transfer from? Input number, or 0 to go back to main menu: ")
+        which_budget_from = str(int(which_budget_from)-1)
         if which_budget_from == "-1":
             return
         elif which_budget_from not in Budget.menu_list:
             print("\nbudget doesn't exist")
         else:
-            which_budget_to = ""
-            while which_budget.isdigit() == False:
-                which_budget = input("\nWhich budget do you want to transfer to? Input number, or 0 to go back to main menu: ")
-            which_budget = str(int(which_budget)-1)
+            which_budget_to = input("\nWhich budget do you want to transfer to? Input number, or 0 to go back to main menu: ")
+            while which_budget_to.isdigit() == False:
+                print("\nInvalid input")
+                which_budget_to = input("\nWhich budget do you want to transfer to? Input number, or 0 to go back to main menu: ")
+            which_budget_to = str(int(which_budget_to)-1)
             if which_budget_to == "-1":
                 return
             elif which_budget_to not in Budget.menu_list:
                 print("\nbudget doesn't exist")
             else:
-                how_much = round(float(input("\nHow much do you want to transfer8?: ")),2)
-                if how_much <= 0:
-                    print("\nMust be a positive amount")
+                how_much = input("\nHow much do you want to transfer? (must be a postive amount): ")
+                while how_much.replace(".","",1).isdigit() == False: 
+                    print("\nNot a valid amount")
+                    how_much = input("\nHow much do you want to transfer? (must be a postive amount): ")
+                while float(how_much) <= 0:
+                    print("\nNot a valid amount")
+                    how_much = input("\nHow much do you want to transfer? (must be a postive amount): ")
+                how_much = round(float(how_much),2)
                 Budget.transfer(Budget.budgets[int(which_budget_from)], Budget.budgets[int(which_budget_to)], how_much)
                 
 
@@ -130,13 +151,14 @@ class Budget():
         budget_to.history.append([budget_to.balance, amount])
         Budget.budgets_history.append([budget_from.name,budget_from.balance, -amount])
         Budget.budgets_history.append([budget_to.name,budget_to.balance, amount])
-        print(f"\nYou have transferred £{amount} from {budget_from.name} to {budget_to.name}.\nBalance after transfer:\n\t{budget_from.name}:£{budget_from.balance}\n\t{budget_to.name}:£{budget_to.balance}")
+        print(f"\nYou have transferred £{amount:.2f} from {budget_from.name} to {budget_to.name}.\nBalance after transfer:\n\t{budget_from.name}:£{budget_from.balance:.2f}\n\t{budget_to.name}:£{budget_to.balance:.2f}")
         Budget.save_state()
 
     def balance_of_budget():
         Budget.list_budgets()
-        which_budget = ""
+        which_budget = input("\nWhich budget do you want the balance of? type in number next to name or 0 to return to main menu: ")
         while which_budget.isdigit() == False:
+            print("\nInvalid Input")
             which_budget = input("\nWhich budget do you want the balance of? type in number next to name or 0 to return to main menu: ")
         which_budget = str(int(which_budget)-1)
         if which_budget == "-1":
@@ -149,8 +171,9 @@ class Budget():
 
     def get_input_for_history():
         Budget.list_budgets()
-        which_budget = ""
+        which_budget = input("\nWWhich budget do you want to get a history for? Type in number next to name or 0 to return to menu: ")
         while which_budget.isdigit() == False:
+            print("\nInvalid input")
             which_budget = input("\nWWhich budget do you want to get a history for? Type in number next to name or 0 to return to menu: ")
         which_budget = str(int(which_budget)-1)
         if which_budget == "-1":
@@ -166,9 +189,9 @@ class Budget():
         i = 1
         for x in self.history:
             if self.history.index(x) == 0:
-                print(f"{i} - \t{self.name} was created with balance of £{x[1]}\n")
+                print(f"{i} - \t{self.name} was created with balance of £{x[1]:.2f}\n")
             else:
-                print(f"{i} - \tChange: £{x[1]}\n\tbalance: £{x[0]}\n")
+                print(f"{i} - \tChange: £{x[1]:.2f}\n\tbalance: £{x[0]:.2f}\n")
             i += 1
     
     def print_total_history():
@@ -177,24 +200,24 @@ class Budget():
         print("\n")
         for x in Budget.budgets_history:
             if x[2] =="created":
-                print(f"Account {x[0]} was created with a balance of £{x[1]}")
+                print(f"{i} - Account {x[0]} was created with a balance of £{x[1]:.2f}")
             else:
-                print(f"{i} - Account: {x[0]}. Amount changed: £{x[2]}. Balance after: £{x[1]}")
+                print(f"{i} - Account: {x[0]}. Amount changed: £{x[2]:.2f}. Balance after: £{x[1]:.2f}")
             i += 1
 
     def print_balance(self):
-        print(f"\nYour balance of {self.name} is £{self.balance}")
+        print(f"\nYour balance of {self.name} is £{self.balance:.2f}")
     
     def print_all_balances():
         print("\nList of all current balances")
         print("\n")
         for x in Budget.budgets:
-            print(f"Balance of {x.name} is currently £{x.balance}\n")   
+            print(f"Balance of {x.name} is currently £{x.balance:.2f}\n")   
 
 
     def print_total_balance(budgets=budgets):
         bal = sum([x.balance for x in budgets])
-        print(f"\nThe balance across all budgets is £{bal}")
+        print(f"\nThe balance across all budgets is £{bal:.2f}")
 
     def check_for_save_file():
         if exists("save.txt"):
