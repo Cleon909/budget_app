@@ -25,6 +25,7 @@ class Budget():
         name.history = []
         name.history.append(["created", name.balance])
         Budget.budgets.append(name)
+        Budget.budgets_history.append(["created: " +name.name,name.balance,amount])
 
     def __repr__(self):
         return f"There is £{self.balance} in the {self} budget. If you want a print of the history use history method."
@@ -146,7 +147,7 @@ class Budget():
     def print_total_history(budgets_history=budgets_history):
         i = 1
         for x in budgets_history:
-            print(f"{i} - Account: {x[0]}, Balance after Transfer: £{x[1]}, amount: £{x[2]}")
+            print(f"{i} - Account: {x[0]}, amount: £{x[2]}, Balance after: £{x[1]}, ")
             i += 1
 
     def print_all_balances():
@@ -192,7 +193,7 @@ class Budget():
         
     def list_budgets():
         Budget.menu_list = []
-        print("List of existing budgets:")
+        print("\nList of existing budgets:\n")
         for x,b in enumerate(Budget.budgets):
             Budget.menu_list.append(str(x))
             print(f"{x+1}.  {b.name}")
