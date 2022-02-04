@@ -32,8 +32,10 @@ class Budget():
 
     def get_input_for_deposit():
         Budget.list_budgets()
-        which_budget = str(int(input("\nWhich budget do you want to deposit to? Input number: "))-1)
-        if which_budget not in Budget.menu_list:
+        which_budget = str(int(input("\nWhich budget do you want to deposit to? Input number, or 0 to go back to main menu: "))-1)
+        if which_budget == "-1":
+            return
+        elif which_budget not in Budget.menu_list:
             print("\nbudget doesn't exist")
         else:
             how_much = round(float(input("\nHow much do you want to deposit?: ")),2)
@@ -57,8 +59,10 @@ class Budget():
 
     def get_input_for_withdraw():            
         Budget.list_budgets()
-        which_budget = str(int(input("\nWhich budget do you want to withdraw from? Input number: "))-1)
-        if which_budget not in Budget.menu_list:
+        which_budget = str(int(input("\nWhich budget do you want to withdraw from? Input number or input 0 to back to main menu: "))-1)
+        if which_budget == "-1":
+            return
+        elif which_budget not in Budget.menu_list:
             print("\nbudget doesn't exist")
         else:
             how_much = round(float(input("\nHow much do you want to withdraw?: ")),2)
@@ -84,12 +88,16 @@ class Budget():
 
     def get_transfer_details():
         Budget.list_budgets()
-        which_budget_from = str(int(input("\nWhich budget do you want to transfer from? Input number: "))-1)
-        if which_budget_from not in Budget.menu_list:
+        which_budget_from = str(int(input("\nWhich budget do you want to transfer from? Input number or 0 to return to main menu: "))-1)
+        if which_budget_from == "-1":
+            return
+        elif which_budget_from not in Budget.menu_list:
             print("\nbudget doesn't exist")
         else:
-            which_budget_to = str(int(input("Which budget do you want to transfer to? Input number "))-1)
-            if which_budget_to not in Budget.menu_list:
+            which_budget_to = str(int(input("Which budget do you want to transfer to? Input number or input 0 to return to main menu"))-1)
+            if which_budget_to == "-1":
+                return
+            elif which_budget_to not in Budget.menu_list:
                 print("\nbudget doesn't exist")
             else:
                 how_much = round(float(input("\nHow much do you want to transfer8?: ")),2)
@@ -115,8 +123,10 @@ class Budget():
 
     def balance_of_budget():
         Budget.list_budgets()
-        which_budget = str(int(input("\nWhich budget do you want the balance of? type in number next to name: "))-1)
-        if which_budget not in Budget.menu_list:
+        which_budget = str(int(input("\nWhich budget do you want the balance of? type in number next to name or 0 to return to main menu: "))-1)
+        if which_budget == "-1":
+            return
+        elif which_budget not in Budget.menu_list:
             print("\nbudget doesn't exist")
         else:
             Budget.budgets[int(which_budget)].print_balance()    
@@ -124,8 +134,10 @@ class Budget():
 
     def get_input_for_history():
         Budget.list_budgets()
-        which_budget = str(int(input("\nWhich budget do you want to get a history for? Type in number next to name: "))-1)
-        if which_budget not in Budget.menu_list:
+        which_budget = str(int(input("\nWhich budget do you want to get a history for? Type in number next to name or 0 to return to menu: "))-1)
+        if which_budget == "-1":
+            return        
+        elif which_budget not in Budget.menu_list:
             print("\nbudget doesn't exist")
         else:
             Budget.budgets[int(which_budget)].print_history()
