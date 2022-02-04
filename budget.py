@@ -16,84 +16,85 @@ class Budget():
 
     def create_budget():
         Budget.list_budgets()
-        name = input("choose name for budget: ")
+        name = input("\nchoose name for budget: ")
         while name in (x.name for x in Budget.budgets):
-            print("name taken")
-            name = input("choose name for budget: ")
-        amount = round(float(input("Initial amount in budget: ")),2)
+            print("\nname taken")
+            name = input("\nchoose name for budget: ")
+        amount = round(float(input("\nInitial amount in budget: ")),2)
         name = Budget(name,amount)
         name.history = []
         name.history.append(["created", name.balance])
         Budget.budgets.append(name)
+        Budget.budgets_history.append([name.name,name.balance, "created"])
 
     def __repr__(self):
-        return f"There is £{self.balance} in the {self} budget. If you want a print of the history use history method."
+        return f"\nThere is £{self.balance} in the {self} budget. If you want a print of the history use history method."
 
     def get_input_for_deposit():
         Budget.list_budgets()
-        which_budget = str(int(input("Which budget do you want to deposit to? Input number: "))-1)
+        which_budget = str(int(input("\nWhich budget do you want to deposit to? Input number: "))-1)
         if which_budget not in Budget.menu_list:
-            print("budget doesn't exist")
+            print("\nbudget doesn't exist")
         else:
-            how_much = round(float(input("How much do you want to deposit?: ")),2)
+            how_much = round(float(input("\nHow much do you want to deposit?: ")),2)
             Budget.budgets[int(which_budget)].deposit(how_much)
     
     def deposit(self, amount):
         amount = round(amount,2)
         if amount < 0:
-            print("Negative amount not allowed, use withdraw instead")
+            print("\nNegative amount not allowed, use withdraw instead")
         elif amount == 0:
-            print("no change")
+            print("\nno change")
         else:
             self.balance += amount
             if isinstance(self.history, type(None)):
                 self.history = []
             self.history.append([self.balance, amount])
-            Budget.budgets_history.append([self.name,self.balance,amount])
-            print(f"You have deposited £{amount} into {self.name}. The new balance is £{self.balance}")
+            Budget.budgets_history.append([self.name,self.balance, amount])
+            print(f"\nYou have deposited £{amount} into {self.name}. The new balance is £{self.balance}")
             Budget.save_state()
  
 
     def get_input_for_withdraw():            
         Budget.list_budgets()
-        which_budget = str(int(input("Which budget do you want to withdraw from? Input number: "))-1)
+        which_budget = str(int(input("\nWhich budget do you want to withdraw from? Input number: "))-1)
         if which_budget not in Budget.menu_list:
-            print("budget doesn't exist")
+            print("\nbudget doesn't exist")
         else:
-            how_much = round(float(input("How much do you want to withdraw?: ")),2)
+            how_much = round(float(input("\nHow much do you want to withdraw?: ")),2)
             Budget.budgets[int(which_budget)].withdraw(how_much)
 
 
     def withdraw(self, amount):
         amount = round(amount,2)
         if amount < 0:
-            print("Negative amount not allowed, use a positive integer")
+            print("\nNegative amount not allowed, use a positive integer")
         elif amount == 0:
-            print("no change")
+            print("\nno change")
         else:
             self.balance -= amount
             if isinstance(self.history, type(None)):
                 self.history = []
             self.history.append([self.balance, -amount])
-            Budget.budgets_history.append([self.name,self.balance,amount])
-            print(f"You have withdrawn £{amount} from {self.name}. The new balance is £{self.balance}", "blue")
+            Budget.budgets_history.append([self.name,self.balance,f"amount"])
+            print(f"\nYou have withdrawn £{amount} from {self.name}. The new balance is £{self.balance}", "blue")
             Budget.save_state()
   
     
 
     def get_transfer_details():
         Budget.list_budgets()
-        which_budget_from = str(int(input("Which budget do you want to transfer from? Input number: "))-1)
+        which_budget_from = str(int(input("\nWhich budget do you want to transfer from? Input number: "))-1)
         if which_budget_from not in Budget.menu_list:
-            print("budget doesn't exist")
+            print("\nbudget doesn't exist")
         else:
             which_budget_to = str(int(input("Which budget do you want to transfer to? Input number "))-1)
             if which_budget_to not in Budget.menu_list:
-                print("budget doesn't exist")
+                print("\nbudget doesn't exist")
             else:
-                how_much = round(float(input("How much do you want to transfer8?: ")),2)
+                how_much = round(float(input("\nHow much do you want to transfer8?: ")),2)
                 if how_much <= 0:
-                    print("Must be a positive amount")
+                    print("\nMust be a positive amount")
                 Budget.transfer(Budget.budgets[int(which_budget_from)], Budget.budgets[int(which_budget_to)], how_much)
                 
 
@@ -107,31 +108,31 @@ class Budget():
         if isinstance(budget_to.history, type(None)):
             budget_to.history = []
         budget_to.history.append([budget_to.balance, amount])
-        Budget.budgets_history.append([budget_from.name,budget_from.balance,-amount])
-        Budget.budgets_history.append([budget_to.name,budget_to.balance,amount])
-        print(f"You have transferred £{amount} from {budget_from.name} to {budget_to.name}.\nBalance after transfer:\n\t{budget_from.name}:£{budget_from.balance}\n\t{budget_to.name}:£{budget_to.balance}")
+        Budget.budgets_history.append([budget_from.name,budget_from.balance, -amount])
+        Budget.budgets_history.append([budget_to.name,budget_to.balance, amount])
+        print(f"\nYou have transferred £{amount} from {budget_from.name} to {budget_to.name}.\nBalance after transfer:\n\t{budget_from.name}:£{budget_from.balance}\n\t{budget_to.name}:£{budget_to.balance}")
         Budget.save_state()
 
     def balance_of_budget():
         Budget.list_budgets()
-        which_budget = str(int(input("Which budget do you want the balance of? type in number next to name: "))-1)
+        which_budget = str(int(input("\nWhich budget do you want the balance of? type in number next to name: "))-1)
         if which_budget not in Budget.menu_list:
-            print("budget doesn't exist")
+            print("\nbudget doesn't exist")
         else:
             Budget.budgets[int(which_budget)].print_balance()    
 
 
     def get_input_for_history():
         Budget.list_budgets()
-        which_budget = str(int(input("Which budget do you want to get a history for? Type in number next to name: "))-1)
+        which_budget = str(int(input("\nWhich budget do you want to get a history for? Type in number next to name: "))-1)
         if which_budget not in Budget.menu_list:
-            print("budget doesn't exist")
+            print("\nbudget doesn't exist")
         else:
             Budget.budgets[int(which_budget)].print_history()
 
 
     def print_history(self):
-        print(f"History of {self.name}")
+        print(f"\nHistory of {self.name}\n")
         i = 1
         for x in self.history:
             if self.history.index(x) == 0:
@@ -145,8 +146,13 @@ class Budget():
     
     def print_total_history(budgets_history=budgets_history):
         i = 1
-        for x in budgets_history:
-            print(f"{i} - Account: {x[0]}, Balance after Transfer: £{x[1]}, amount: £{x[2]}")
+        print = "\n"
+        pdb.set_trace()
+        for x in Budget.budgets_history:
+            if x[2] =="created":
+                print(f"{i} - Account {x[0]}, was created with a balance of £{x[1]}")
+            else:
+                print(f"{i} - Account: {x[0]}. Amount changed: £{x[2]}. Balance after: £{x[1]}")
             i += 1
 
     def print_all_balances():
@@ -192,7 +198,7 @@ class Budget():
         
     def list_budgets():
         Budget.menu_list = []
-        print("List of existing budgets:")
+        print("\nList of existing budgets:\n")
         for x,b in enumerate(Budget.budgets):
             Budget.menu_list.append(str(x))
             print(f"{x+1}.  {b.name}")
