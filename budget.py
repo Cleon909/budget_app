@@ -28,7 +28,8 @@ class Budget():
         Budget.budgets_history.append([name.name,name.balance, "created"])
 
     def __repr__(self):
-        return f"\nThere is £{self.balance} in the {self} budget. If you want a print of the history use history method."
+        rep = "There is £ " + str(self.balance) + " in the " + self.name + " budget. If you want a print of the history use history method."
+        return rep
 
     def get_input_for_deposit():
         Budget.list_budgets()
@@ -162,7 +163,7 @@ class Budget():
         pdb.set_trace()
         for x in Budget.budgets_history:
             if x[2] =="created":
-                print(f"{i} - Account {x[0]}, was created with a balance of £{x[1]}")
+                print(f"{i} - Account {x[0]}, was created with a balance of £{x[1]})")
             else:
                 print(f"{i} - Account: {x[0]}. Amount changed: £{x[2]}. Balance after: £{x[1]}")
             i += 1
