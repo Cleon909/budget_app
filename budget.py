@@ -101,7 +101,7 @@ class Budget():
             self.history = []
         self.history.append([self.balance, -amount])
         Budget.budgets_history.append([self.name,self.balance,-amount])
-        print(f"\nYou have withdrawn £{amount:.2f} from {self.name}. The new balance is £{self.balance:.2f}", "blue")
+        print(f"\nYou have withdrawn £{amount:.2f} from {self.name}. The new balance is £{self.balance:.2f}")
         Budget.save_state()
   
     
